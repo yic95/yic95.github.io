@@ -1,0 +1,25 @@
+<html>
+<head>
+<script>
+navigator.geolocation.watchPosition(
+	(pos) => {
+		let elem = document.getElementById("geolocation");
+		elem.innerHTML += pos.timestamp + ","
+						+ pos.coords.latitude + "," 
+						+ pos.coords.longitude + "," 
+						+ pos.coords.heading + "," 
+						+ pos.coords.speed + "\n";
+	},
+	(err) => {
+		let elem = document.getElementById("geolocation");
+		elem.innerHTML += "----\n";
+	},
+	{enableHighAccuracy: true, timeout: 10000, maximumAge: 0}
+);
+</script>
+</head>
+<body>
+<pre id="geolocation">
+</pre>
+</body>
+</html>
