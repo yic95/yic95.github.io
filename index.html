@@ -1,25 +1,29 @@
 <html>
 <head>
 <script>
+let gpsPositionList = [];
 navigator.geolocation.watchPosition(
 	(pos) => {
-		let elem = document.getElementById("geolocation");
-		elem.innerHTML += pos.timestamp + ","
-						+ pos.coords.latitude + "," 
-						+ pos.coords.longitude + "," 
-						+ pos.coords.heading + "," 
-						+ pos.coords.speed + "\n";
+        gpsPositionList.push(pos);
 	},
 	(err) => {
-		let elem = document.getElementById("geolocation");
-		elem.innerHTML += "----\n";
+        gpsPositionList.push(null);
 	},
-	{enableHighAccuracy: true, timeout: 10000, maximumAge: 0}
+	{enableHighAccuracy: true, timeout: 2000, maximumAge: 0}
 );
+
+let button = document.getElementById("copybutton");
+button.addEventListener("click", writeClipboard);
+
+async function writeClipboard() {
+    type = "application/json";
+    text = JSON.stringify(gpsPositionList);
+    const clipboardItem = new ClipboardItem({[type]: text});
+    await navigator.clipboard.write([clipboardItem]);
+}
 </script>
 </head>
 <body>
-<pre id="geolocation">
-</pre>
+<button id="copybutton">複製資料</button>
 </body>
 </html>
