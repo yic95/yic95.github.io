@@ -1,14 +1,20 @@
 <html>
 <head>
+</head>
+<body>
+<button id="copybutton">複製資料</button>
+<p>資料筆數：<span id="count"></span></p>
 <script>
 let gpsPositionList = [];
 navigator.geolocation.watchPosition(
 	(pos) => {
         gpsPositionList.push(pos);
+        document.getElementById("count").innerHTML = gpsPositionList.length.toString();
 	},
 	(err) => {
         gpsPositionList.push(null);
-	},
+        document.getElementById("count").innerHTML = gpsPositionList.length.toString();
+    },
 	{enableHighAccuracy: true, timeout: 2000, maximumAge: 0}
 );
 
@@ -16,14 +22,11 @@ let button = document.getElementById("copybutton");
 button.addEventListener("click", writeClipboard);
 
 async function writeClipboard() {
-    type = "application/json";
+    type = "text/plain";
     text = JSON.stringify(gpsPositionList);
     const clipboardItem = new ClipboardItem({[type]: text});
     await navigator.clipboard.write([clipboardItem]);
 }
 </script>
-</head>
-<body>
-<button id="copybutton">複製資料</button>
 </body>
 </html>
